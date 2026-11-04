@@ -130,6 +130,8 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(import.meta.dirname, './src'),
+      'react': path.resolve(import.meta.dirname, './node_modules/react'),
+      'react-dom': path.resolve(import.meta.dirname, './node_modules/react-dom'),
     },
     dedupe: ['react', 'react-dom'],
   },
@@ -151,7 +153,6 @@ export default defineConfig({
     allowedHosts: true,
   },
   ssr: {
-    // إصلاح مشكلة عثور الـ SSR على حزم التوجيه والريأكت أثناء البناء
     noExternal: ['@tanstack/react-start', '@tanstack/react-router'],
   },
   build: {
