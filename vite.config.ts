@@ -130,8 +130,6 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(import.meta.dirname, './src'),
-      'react': path.resolve(import.meta.dirname, './node_modules/react'),
-      'react-dom': path.resolve(import.meta.dirname, './node_modules/react-dom'),
     },
     dedupe: ['react', 'react-dom'],
   },
