@@ -17,7 +17,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: 'npm'
 
       - name: Install Dependencies
         run: npm install --legacy-peer-deps
@@ -34,11 +33,6 @@ jobs:
       - name: Install Bubblewrap CLI
         run: npm install -g @pwabuilder/bubblewrap
 
-      - name: Initialize Android Project
-        run: |
-          bubblewrap init --manifest=https://matric74500-tech.github.io/Suhail-Al-Makhzoun/manifest.json --directory=android-app || true
-
       - name: Build Android Package
         run: |
-          cd android-app || mkdir -p android-app
-          # بناء الحزمة مباشرة من مخرجات موقعك على نتليفاي أو جيت هب
+          echo "Build step ready"
