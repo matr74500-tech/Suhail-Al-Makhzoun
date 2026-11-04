@@ -1,0 +1,15 @@
+{
+  "appId": "com.suhail.makhzoun",
+  "appName": "سهيل المخزن",
+  "webDir": "dist",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https",
+    "cleartext": true
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  }
+}
