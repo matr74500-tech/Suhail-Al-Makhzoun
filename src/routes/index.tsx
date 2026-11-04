@@ -351,8 +351,114 @@ function InventoryApp() {
 }
 
 function SignInScreen({ onSignIn }: { onSignIn: () => void }) {
-  return <main dir="rtl" className="grid min-h-dvh place-items-center bg-background p-5"><section className="surface-card w-full max-w-md overflow-hidden"><div className="hero-panel p-8 text-primary-foreground"><div className="mb-5 grid h-12 w-12 place-items-center rounded-2xl bg-primary-foreground/15"><Boxes size={24} /></div><p className="text-sm text-primary-foreground/70">مكتبة ومحلات الإخوة</p><h1 className="mt-2 font-serif text-3xl font-semibold">إدارة المخزون<br />بكل بساطة.</h1><p className="mt-3 text-sm leading-6 text-primary-foreground/75">سجل دخولك لإدارة الأصناف ومتابعة رصيد متجرك بأمان.</p></div><div className="p-7"><button onClick={onSignIn} className="primary-button w-full justify-center">تسجيل الدخول للمتابعة <ChevronDown size={16} /></button><p className="mt-4 text-center text-xs leading-5 text-muted-foreground">تسجيل الدخول يتم عبر صفحة Blink الآمنة. سجّل بالحساب الذي سيستخدم بيانات هذا المتجر.</p></div></section></main>
+  const [useUsernameMode, setUseUsernameMode] = useState(true);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [localError, setLocalError] = useState('');
+
+  // يمكنك تغيير اسم المستخدم وكلمة السر من هنا
+  const ADMIN_USER = "admin";
+  const ADMIN_PASS = "123456";
+
+  const handleCustomLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (username === ADMIN_USER && password === ADMIN_PASS) {
+      setLocalError('');
+      toast.success("تم تسجيل الدخول بنجاح!");
+      onSignIn(); // استدعاء الدالة الأصلية في المشروع للدخول مباشرة
+    } else {
+      setLocalError("اسم المستخدم أو كلمة السر غير صحيحة");
+    }
+  };
+
+  return (
+    <div className="grid min-h-dvh place-items-center bg-background p-4" dir="rtl">
+      <div className="w-full max-w-sm space-y-5 surface-card p-6 rounded-2xl shadow-lg border border-border">
+        
+        {/* عنوان الشاشة */}
+        <div className="text-center space-y-1">
+          <h1 className="text-xl font-bold tracking-tight text-foreground">محلات ومكتبة الإخوة</h1>
+          <p className="text-xs text-muted-foreground">نظام سهيل المخزن للخدمات والمبيعات</p>
+        </div>
+
+        {/* أزرار التنقل بين الخيارين */}
+        <div className="flex border-b border-border text-xs">
+          <button
+            type="button"
+            className={`flex-1 py-2 font-medium border-b-2 transition-colors ${
+              useUsernameMode ? 'border-primary text-primary font-bold' : 'border-transparent text-muted-foreground'
+            }`}
+            onClick={() => setUseUsernameMode(true)}
+          >
+            اسم المستخدم وكلمة السر
+          </button>
+          <button
+            type="button"
+            className={`flex-1 py-2 font-medium border-b-2 transition-colors ${
+              !useUsernameMode ? 'border-primary text-primary font-bold' : 'border-transparent text-muted-foreground'
+            }`}
+            onClick={() => setUseUsernameMode(false)}
+          >
+            البريد الإلكتروني (السابق)
+          </button>
+        </div>
+
+        {/* الخيار الأول: اسم المستخدم وكلمة السر */}
+        {useUsernameMode ? (
+          <form onSubmit={handleCustomLogin} className="space-y-4 text-sm">
+            {localError && (
+              <div className="p-2 text-xs text-red-600 bg-red-50 rounded text-center border border-red-200">
+                {localError}
+              </div>
+            )}
+            <div>
+              <label className="block form-label mb-1">اسم المستخدم</label>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="أدخل اسم المستخدم"
+                required
+                className="w-full px-3 py-2 border rounded-lg bg-background text-foreground"
+              />
+            </div>
+            <div>
+              <label className="block form-label mb-1">كلمة السر</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="أدخل كلمة السر"
+                required
+                className="w-full px-3 py-2 border rounded-lg bg-background text-foreground"
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full py-2 bg-primary text-primary-foreground font-medium rounded-lg hover:opacity-90 transition"
+            >
+              تسجيل الدخول السريع
+            </button>
+          </form>
+        ) : (
+          /* الخيار الثاني: الدخول بالبريد القديم */
+          <div className="space-y-3 text-center py-2">
+            <p className="text-xs text-muted-foreground">تسجيل الدخول التلقائي عبر مزود الخدمة:</p>
+            <button
+              type="button"
+              onClick={onSignIn}
+              className="w-full py-2 bg-secondary text-secondary-foreground font-medium rounded-lg hover:opacity-90 transition text-sm"
+            >
+              متابعة بالبريد الإلكتروني
+            </button>
+          </div>
+        )}
+
+      </div>
+    </div>
+  );
 }
+
 
 function StatCard({ label, value, note, icon, tone }: { label: string; value: string; note: string; icon: ReactNode; tone: string }) {
   return <article className="surface-card group p-5 transition duration-200 hover:-translate-y-0.5 hover:shadow-md"><div className="flex items-center justify-between"><span className="text-sm text-muted-foreground">{label}</span><span className={`stat-icon stat-${tone}`}>{icon}</span></div><div className="mt-5 text-2xl font-semibold tracking-tight">{value}</div><div className="mt-1 text-xs text-muted-foreground">{note}</div></article>
